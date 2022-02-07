@@ -1,0 +1,36 @@
+{
+  "name": "z-prefix-blog",
+  "version": "1.0.0",
+  "description": "Z-Prefix Stage 3 CRUD Application",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Robert-F-Cameron/z-prefix-blog.git"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "sequelize",
+    "postgres",
+    "rest",
+    "API"
+  ],
+  "author": "Rob Cameron",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Robert-F-Cameron/z-prefix-blog/issues"
+  },
+  "homepage": "https://github.com/Robert-F-Cameron/z-prefix-blog#readme",
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.15.1",
+    "sequelize-cli": "^6.4.1"
+  }
+}
