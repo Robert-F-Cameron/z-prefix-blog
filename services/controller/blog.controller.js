@@ -13,8 +13,9 @@ exports.create = (req, res) => {
   // Create a Blog Post
   const blog = {
     title: req.body.title,
-    description: req.body.contents,
+    contents: req.body.contents,
     published: req.body.published ? req.body.published : false,
+    userId: userId,
   };
   // Save Blog Post in the database
   Blog.create(blog)
@@ -45,20 +46,20 @@ const title = req.query.title;
 //finds one blog post by ID
 exports.findOne = (req, res) => {
     const id = req.params.id;
-    Blog.findByPk(id)
+  Blog.findByPk(id, { include: ["user"] })
     .then(data => {
-        if (data) {
+      if (data) {
         res.send(data);
-        } else {
+      } else {
         res.status(404).send({
-            message: `Cannot find Blog Post with id=${id}.`,
+          message: `Cannot find Blog Post with id=${id}.`,
         });
-        }
+      }
     })
     .catch(err => {
-        res.status(500).send({
+      res.status(500).send({
         message: "Error retrieving Blog Post with id=" + id,
-        });
+      });
     });
 };
 //Updates blog post using the blog ID

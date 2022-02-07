@@ -22,4 +22,16 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.blog = require("./blog.model.js")(sequelize, Sequelize);
+db.user = require("./user.model.js")(sequelize, Sequelize);
+
+//Relationhips
+db.user.hasMany(db.blog, {
+  as: "blogPosts"
+});
+
+db.blog.belongsTo(db.user, {
+  foreignKey: "userId",
+  as: "user"
+})
+
 module.exports = db;

@@ -10,4 +10,6 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.BOOLEAN
         },
     });
+
+    return Blog;
 }
