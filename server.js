@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
 const db = require('./services/models');
+const Role = db.role
 
 const PORT = process.env.PORT || 8080; // use either the host env var port (PORT) provided by Heroku or the local port (8081) on your machine
 
@@ -21,7 +22,25 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //Syncs the database to the models created by Sequelize - Force is used for development purposes to drop and resync.
 db.sequelize.sync({ force: true }).then(() => {
   console.log("Drop and re-sync db.");
+  initial();
 });
+
+function initial() {
+  Role.create({
+    id: 1,
+    name: "user",
+  });
+
+  Role.create({
+    id: 2,
+    name: "moderator",
+  });
+
+  Role.create({
+    id: 3,
+    name: "admin",
+  });
+}
 
 //Initial route
 app.get('/', (req, res) => {
@@ -30,6 +49,7 @@ app.get('/', (req, res) => {
 
 require('./services/routes/blog.routes')(app);
 require('./services/routes/user.routes')(app);
+require('./services/routes/test.routes')(app);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`)
