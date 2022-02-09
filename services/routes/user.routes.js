@@ -1,3 +1,5 @@
+const { route } = require("express/lib/application");
+
 module.exports = app => {
   const users = require("../controller/user.controller.js");
   const { verifySignUp } = require("../middleware");
@@ -12,6 +14,8 @@ module.exports = app => {
     ],
     users.signup
   );
+
+  router.post("/refreshtoken", users.refreshToken)
 
   //signs the user in.
   router.post("/signin",

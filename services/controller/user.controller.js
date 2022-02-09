@@ -1,6 +1,5 @@
 const db = require("../models");
-const User = db.user;
-const Role = db.role;
+const { user: User, role: Role, refreshToken: RefreshToken } = db;
 const Op = db.Sequelize.Op;
 const config = require("../config/auth.config");
 var jwt = require("jsonwebtoken");
@@ -58,7 +57,7 @@ exports.signin = (req, res) => {
       username: req.body.username,
     },
   })
-    .then(user => {
+    .then(async (user) => {
       if (!user) {
         return res.status(404).send({ message: "User Not found." });
       }
@@ -72,9 +71,10 @@ exports.signin = (req, res) => {
           message: "Invalid Password!",
         });
       }
-      var token = jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: 86400, // 24 hours
+      const token = jwt.sign({ id: user.id }, config.secret, {
+        expiresIn: config.jwtExpiration, // 24 hours
       });
+      let refreshToken = await RefreshToken.createToken(user);
       var authorities = [];
       user.getRoles().then(roles => {
         for (let i = 0; i < roles.length; i++) {
@@ -88,12 +88,49 @@ exports.signin = (req, res) => {
           email: user.email,
           roles: authorities,
           accessToken: token,
+          refreshToken: refreshToken,
         });
       });
     })
     .catch(err => {
       res.status(500).send({ message: err.message });
     });
+};
+
+//Refreshtoken Endpoint
+exports.refreshToken = async (req, res) => {
+  const { refreshToken: requestToken } = req.body;
+  if (requestToken == null) {
+    return res.status(403).json({ message: "Refresh Token is required!" });
+  }
+  try {
+    let refreshToken = await RefreshToken.findOne({
+      where: { token: requestToken },
+    });
+    console.log(refreshToken);
+    if (!refreshToken) {
+      res.status(403).json({ message: "Refresh token is not in database!" });
+      return;
+    }
+    if (RefreshToken.verifyExpiration(refreshToken)) {
+      RefreshToken.destroy({ where: { id: refreshToken.id } });
+
+      res.status(403).json({
+        message: "Refresh token was expired. Please make a new signin request",
+      });
+      return;
+    }
+    const user = await refreshToken.getUser();
+    let newAccessToken = jwt.sign({ id: user.id }, config.secret, {
+      expiresIn: config.jwtExpiration,
+    });
+    return res.status(200).json({
+      accessToken: newAccessToken,
+      refreshToken: refreshToken.token,
+    });
+  } catch (err) {
+    return res.status(500).send({ message: err });
+  }
 };
 
 //Retreives all users from the database 💪
