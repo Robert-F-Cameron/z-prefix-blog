@@ -17,7 +17,7 @@ module.exports = (sequelize, Sequelize) => {
     password: {
         type: Sequelize.STRING,
         validator: {
-            is: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,10}$/i,
+            is: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i,
         },
     },
     email: {

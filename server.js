@@ -2,13 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
-const db = require('./services/models');
+const db = require('./backend/models');
 const Role = db.role
 
 const PORT = process.env.PORT || 8080; // use either the host env var port (PORT) provided by Heroku or the local port (8081) on your machine
 
 var corsOptions = {
-  origin: process.env.FRONTEND || "http://localhost:8081", 
+  origin: process.env.FRONTEND || "http://localhost:3000", 
 };
 
 app.use(cors(corsOptions));
@@ -47,9 +47,9 @@ app.get('/', (req, res) => {
   res.json({ message: "Welcome to the z-prefix-blog" });
 })
 
-require('./services/routes/blog.routes')(app);
-require('./services/routes/user.routes')(app);
-require('./services/routes/test.routes')(app);
+require('./backend/routes/blog.routes')(app);
+require('./backend/routes/user.routes')(app);
+require('./backend/routes/test.routes')(app);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`)
