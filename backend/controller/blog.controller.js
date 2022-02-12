@@ -43,6 +43,21 @@ const title = req.query.title;
         });
     });
 };
+
+//Finds all users blog posts
+exports.findUserPosts = (req, res) => {
+const userId = req.params.userId;
+    var condition = userId ? { userId: `${userId}` } : null;
+    Blog.findAll({ where: condition })
+    .then(data => {
+        res.send(data);
+    })
+    .catch(err => {
+        res.status(500).send({
+        message: err.message || "Some error occurred while retrieving your blog posts.",
+        });
+    });
+};
 //finds one blog post by ID
 exports.findOne = (req, res) => {
     const id = req.params.id;

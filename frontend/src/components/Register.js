@@ -1,39 +1,39 @@
 import React, { useState } from "react";
 import AuthService from "../services/auth.service";
-import { Button, Container, Form } from "react-bootstrap";
+import { Button, Container, Form, Row, Col } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.css";
 import { Formik } from "formik";
 import * as yup from "yup";
 
-  const schema = yup.object().shape({
-    username: yup
-      .string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    firstName: yup
-      .string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    LastName: yup
-      .string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    email: yup.string().email("Invalid email").required("Required"),
-    password: yup
-      .string()
-      .min(2, "Too Short!")
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i,
-        "Must have one uppercase letter, one lowercase letter, one number and one special character."
-      )
-      .required("Required"),
-  });
+
+// Schema for yup
+const validationSchema = yup.object().shape({
+  username: yup
+    .string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  firstName: yup
+    .string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  lastName: yup
+    .string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  email: yup.string().email("Invalid email").required("Required"),
+  password: yup
+    .string()
+    .min(2, "Too Short!")
+    .required("Required"),
+});
 
 const Register = () => {
   return (
     <Container>
+      {/* //Sets initial values for form inputs */}
       <Formik
         initialValues={{
           username: "",
@@ -42,12 +42,10 @@ const Register = () => {
           email: "",
           password: "",
         }}
-        validationSchema={schema}
+        validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting, resetForm }) => {
-          // When button submits form and form is in the process of submitting, submit button is disabled
+          // When button submits form and form is in the process of submitting, submit button is disable
           setSubmitting(true);
-
-          // Simulate submitting to database, shows us values submitted, resets form
           AuthService.register(
             values.username,
             values.firstName,
@@ -64,10 +62,19 @@ const Register = () => {
                   error.response.data.message) ||
                 error.message ||
                 error.toString();
+              console.log(resMessage);
+              resetForm();
+              setSubmitting(false);
+            }
+          )
+            .then(
+            () => {
+               window.location.href = "/";
             }
           );
         }}
       >
+        {/* Callback function containing Formik state and helpers that handle common form actions */}
         {({
           values,
           errors,
@@ -77,67 +84,98 @@ const Register = () => {
           handleSubmit,
           isSubmitting,
         }) => (
-          <Form noValidate onSubmit={handleSubmit}>
-            <Form.Group controlId="validationFormik01">
-              <Form.Label>Username</Form.Label>
+          <Form noValidate onSubmit={handleSubmit} className="mx-auto">
+            <Form.Group controlId="formUsername">
+              <Form.Label>Username :</Form.Label>
               <Form.Control
                 type="text"
+                /* This name property is used to access the value of the form element via values.nameOfElement */
                 name="username"
-                value={values.username}
+                placeholder="Username"
+                /* Set onChange to handleChange */
                 onChange={handleChange}
-                isValid={touched.username && !errors.username}
+                /* Set onBlur to handleBlur */
+                onBlur={handleBlur}
+                /* Store the value of this input in values.name, make sure this is named the same as the name property on the form element */
+                value={values.username}
+                /* Check if the name field (this field) has been touched and if there is an error, if so add the .error class styles defined in the CSS (make the input box red) */
+                // className={touched.username && errors.username ? "error" : null}
               />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+              {/* Applies the proper error message from validateSchema when the user has clicked the element and there is an error, also applies the .error-message CSS class for styling */}
+              {touched.username && errors.username ? (
+                <div className="error-message">{errors.username}</div>
+              ) : null}
             </Form.Group>
-            <Form.Group controlId="validationFormik02">
-              <Form.Label>Username</Form.Label>
+            <Form.Group controlId="formFirstName">
+              <Form.Label>First Name :</Form.Label>
               <Form.Control
                 type="text"
                 name="firstName"
-                value={values.firstName}
+                placeholder="First Name"
                 onChange={handleChange}
-                isValid={touched.firstName && !errors.firstName}
+                onBlur={handleBlur}
+                value={values.firstName}
+                // className={
+                //   touched.firstName && errors.firstName ? "error" : null
+                // }
               />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+              {touched.firstName && errors.firstName ? (
+                <div className="error-message">{errors.firstName}</div>
+              ) : null}
             </Form.Group>
-            <Form.Group controlId="validationFormik03">
-              <Form.Label>Username</Form.Label>
+            <Form.Group controlId="formLastName">
+              <Form.Label>Last Name :</Form.Label>
               <Form.Control
                 type="text"
                 name="lastName"
-                value={values.lastName}
+                placeholder="Last Name"
                 onChange={handleChange}
-                isValid={touched.lastName && !errors.lastName}
+                onBlur={handleBlur}
+                value={values.lastName}
+                // className={touched.lastName && errors.lastName ? "error" : null}
               />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+              {touched.lastName && errors.lastName ? (
+                <div className="error-message">{errors.lastName}</div>
+              ) : null}
             </Form.Group>
-            <Form.Group controlId="validationFormik04">
-              <Form.Label>Username</Form.Label>
+            <Form.Group controlId="formEmail">
+              <Form.Label>Email :</Form.Label>
               <Form.Control
                 type="text"
                 name="email"
+                placeholder="Email"
+                onChange={handleChange}
+                onBlur={handleBlur}
                 value={values.email}
-                onChange={handleChange}
-                isValid={touched.email && !errors.email}
+                // className={touched.email && errors.email ? "error" : null}
               />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+              {touched.email && errors.email ? (
+                <div className="error-message">{errors.email}</div>
+              ) : null}
             </Form.Group>
-            <Form.Group controlId="validationFormik05">
-              <Form.Label>Password</Form.Label>
+            <Form.Group controlId="formPassword">
+              <Form.Label>Password :</Form.Label>
               <Form.Control
-                type="text"
+                type="password"
                 name="password"
-                value={values.password}
+                placeholder="Password"
                 onChange={handleChange}
-                isValid={touched.password && !errors.password}
+                onBlur={handleBlur}
+                value={values.password}
+                // className={touched.password && errors.password ? "error" : null}
               />
+              {touched.password && errors.password ? (
+                <div className="error-message">{errors.password}</div>
+              ) : null}
             </Form.Group>
-            <Button type="submit">Submit form</Button>
+
+            <Button variant="primary" type="submit" disabled={isSubmitting}>
+              Submit
+            </Button>
           </Form>
         )}
-        ;
       </Formik>
     </Container>
   );
-};
+}
 export default Register;

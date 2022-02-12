@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import ContentService from "../services/content.service";
+import { BlogPostCard } from "./blog/BlogPostCard";
 const Home = () => {
   const [content, setContent] = useState("");
   useEffect(() => {
@@ -17,6 +18,19 @@ const Home = () => {
       }
     );
   }, []);
-  return <Container>{content}</Container>;
+
+  const displayBlogPosts = () => {
+    if (!content.length) {
+      return "No Posts Found!";
+    } else {
+      return content.map(post => (
+        <BlogPostCard
+          data={post}
+          key={post.id}
+        />
+      ));
+    }
+  };
+  return displayBlogPosts();
 };
 export default Home;

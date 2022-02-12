@@ -29,12 +29,15 @@ function App() {
   }, []);
   const logOut = () => {
     AuthService.logout();
+    window.location.reload();
   };
   return (
     <div>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand>Supra Coder Blog</Navbar.Brand>
+          <Navbar.Brand as={Link} to={"/home"}  >
+            Supra Coder Blog
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
@@ -42,7 +45,7 @@ function App() {
                 Home
               </Nav.Link>
               {showUserContent && (
-                <Nav.Link as={Link} to={"/mod"} className="nav-link">
+                <Nav.Link as={Link} to={"/user"} className="nav-link">
                   Your Blog Posts
                 </Nav.Link>
               )}

@@ -20,7 +20,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //Syncs the database to the models created by Sequelize - Force is used for development purposes to drop and resync.
-db.sequelize.sync({ force: true }).then(() => {
+db.sequelize.sync({ force: true })
+  .then(() => {
   console.log("Drop and re-sync db.");
   initial();
 });
