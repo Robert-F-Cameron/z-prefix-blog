@@ -55,7 +55,7 @@ export default function BlogPost(props) {
         <Modal.Footer>
           <Button
             variant="primary"
-            hidden={user.id === props.data.userId ? false : true}
+            hidden={!null && user.id === props.data.userId ? false : true}
             onClick={handleEdit}
           >
             Edit Post
