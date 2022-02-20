@@ -1,25 +1,27 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Card } from "react-bootstrap";
 import userService from "../../services/user.service";
-const dateFormat = require('date-format')
+import BlogPost from "./BlogPost";
+const dateFormat = require("date-format");
 
 function truncate(str, numWords) {
-    return str.split(" ").splice(0,numWords).join(" ");
+  return str.split(" ").splice(0, numWords).join(" ");
 }
 
-
 export function BlogPostCard(props) {
-    const [author, setAuthor] = useState('');
-    const fetchData = useCallback(async () => {
-        var author_ = await userService.getSingleUser(props.data.userId);
-        var author = author_.data
-        setAuthor(`${author.firstName} ${author.lastName}`)
-    }, [props.data.userId]);
-    
-    useEffect(() => {
-        fetchData();
-    }, [fetchData]);
-    
+  const [author, setAuthor] = useState("");
+  const fetchData = useCallback(async () => {
+    var postAuthor = await userService.getSingleUser(props.data.userId);
+    if (!postAuthor.data) {
+      setAuthor("Oops! No Author Saved!");
+    } else {
+      setAuthor(`${postAuthor.data.firstName} ${postAuthor.data.lastName}`);
+    }
+  }, [props.data]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   return (
     <Card>
@@ -38,7 +40,7 @@ export function BlogPostCard(props) {
             dateFormat.parse(dateFormat.ISO8601_FORMAT, props.data.updatedAt)
           )}
         </Card.Text>
-        {/* <BlogPost data={props.data}/> */}
+        <BlogPost data={props.data}/>
       </Card.Body>
     </Card>
   );

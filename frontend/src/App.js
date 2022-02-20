@@ -29,7 +29,7 @@ function App() {
   }, []);
   const logOut = () => {
     AuthService.logout();
-    window.location.reload();
+    window.location.href = "/";
   };
   return (
     <div>

@@ -15,7 +15,7 @@ exports.create = (req, res) => {
     title: req.body.title,
     contents: req.body.contents,
     published: req.body.published ? req.body.published : false,
-    userId: userId,
+    userId: req.body.userId,
   };
   // Save Blog Post in the database
   Blog.create(blog)

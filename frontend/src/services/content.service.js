@@ -10,20 +10,48 @@ const getPublicContent = () => {
 };
 //Gets User Content
 const getUserContent = () => {
-    return axios.get(API_URL +"user/"+ user.id);
-}
-//Gets Moderator Content
-const getModContent = () => {
-  return axios.get(API_URL + "mod", { headers: authHeader() });
+  return axios.get(API_URL + "user/" + user.id);
 };
-//Gets Admin Content
-const getAdminContent = () => {
-  return axios.get(API_URL + "admin", { headers: authHeader() });
+//Post Blog
+const postBlog = (title, contents, published, userId) => {
+  return axios
+    .post(
+      API_URL,
+      {
+        title,
+        contents,
+        published,
+        userId,
+      },
+      { headers: authHeader() }
+    )
+    .then(response => {
+      console.log(response.data);
+      return response.data;
+    });
+};
+//Post Blog
+const updateBlogPost = (id, title, contents, published, userId) => {
+  return axios
+    .put(
+      API_URL+id,
+      {
+        title,
+        contents,
+        published,
+        userId,
+      },
+      { headers: authHeader() }
+    )
+    .then(response => {
+      console.log(response.data);
+      return response.data;
+    });
 };
 
 export default {
-    getPublicContent,
-    getUserContent,
-    getModContent,
-    getAdminContent
+  getPublicContent,
+  getUserContent,
+  postBlog,
+  updateBlogPost
 }
