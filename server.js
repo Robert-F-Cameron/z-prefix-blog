@@ -12,7 +12,7 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.static("build"));
+app.use(express.static("fontend/build"));
 //Parse requests of content type - application-json
 app.use(bodyParser.json());
 
