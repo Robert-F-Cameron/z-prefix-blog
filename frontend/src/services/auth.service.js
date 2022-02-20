@@ -1,5 +1,7 @@
 import axios from 'axios';
-const API_URL = "http://localhost:8080/api/users/";
+const API_URL =
+  `${process.env.DATABASE_URL}/api/users/` ||
+  "http://localhost:8080/api/users/";
 
 //Registration endpoint call
 const register = (username, firstName, lastName, email, password, roles) => {

@@ -1,7 +1,9 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 import authService from './auth.service'
-const API_URL = "http://localhost:8080/api/blogPosts/";
+const API_URL =
+  `${process.env.DATABASE_URL}/api/blogPosts/` ||
+  "http://localhost:8080/api/blogPosts/";
 
 const user = authService.getCurrentUser();
 //Gets all public content
