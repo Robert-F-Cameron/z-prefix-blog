@@ -44,7 +44,7 @@ export default function BlogPost(props) {
   return (
     <Container>
       <Button variant="primary" onClick={handleShow}>
-        View Full Post.
+        View Full Post
       </Button>
 
       <Modal show={show} onHide={handleClose} fullscreen={fullscreen}>
