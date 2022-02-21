@@ -1,4 +1,4 @@
-const db = require('../models');
+const db = require("../models");
 const Blog = db.blog;
 const Op = db.Sequelize.Op;
 
@@ -31,36 +31,42 @@ exports.create = (req, res) => {
 };
 //Finds all blog posts
 exports.findAll = (req, res) => {
-const title = req.query.title;
-    var condition = title ? { title: { [Op.iLike]: `%${title}%` } } : null;
-    Blog.findAll({ where: condition })
+  const title = req.query.title;
+  var condition = title ? { title: { [Op.iLike]: `%${title}%` } } : null;
+  Blog.findAll({
+    where: condition,
+    order: [["updatedAt", "DESC"]],
+  })
     .then(data => {
-        res.send(data);
+      res.send(data);
     })
     .catch(err => {
-        res.status(500).send({
-        message: err.message || "Some error occurred while retrieving blog posts.",
-        });
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving blog posts.",
+      });
     });
 };
 
 //Finds all users blog posts
 exports.findUserPosts = (req, res) => {
-const userId = req.params.userId;
-    var condition = userId ? { userId: `${userId}` } : null;
-    Blog.findAll({ where: condition })
+  const userId = req.params.userId;
+  var condition = userId ? { userId: `${userId}` } : null;
+  Blog.findAll({ where: condition, order: [["updatedAt", "DESC"]] })
     .then(data => {
-        res.send(data);
+      res.send(data);
     })
     .catch(err => {
-        res.status(500).send({
-        message: err.message || "Some error occurred while retrieving your blog posts.",
-        });
+      res.status(500).send({
+        message:
+          err.message ||
+          "Some error occurred while retrieving your blog posts.",
+      });
     });
 };
 //finds one blog post by ID
 exports.findOne = (req, res) => {
-    const id = req.params.id;
+  const id = req.params.id;
   Blog.findByPk(id, { include: ["user"] })
     .then(data => {
       if (data) {
@@ -79,82 +85,80 @@ exports.findOne = (req, res) => {
 };
 //Updates blog post using the blog ID
 exports.update = (req, res) => {
-    const id = req.params.id;
-    Blog.update(req.body, {
-      where: {
-        id: id,
-        order: [["createdAt"]],
-      },
-    })
-      .then(num => {
-        if (num == 1) {
-          res.send({
-            message: "Blog Post was updated successfully.",
-          });
-        } else {
-          res.send({
-            message: `Cannot update Blog Post with id=${id}. Maybe the Post was not found or req.body is empty!`,
-          });
-        }
-      })
-      .catch(err => {
-        res.status(500).send({
-          message: "Error updating Blog Post with id=" + id,
-        });
-      });
-};
-//Deletes blog post by ID
-exports.delete = (req, res) => {
-const id = req.params.id;
-  Blog.destroy({
-    where: { id: id }
+  const id = req.params.id;
+  Blog.update(req.body, {
+    where: {
+      id: id,
+    },
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "Blog post was deleted successfully!"
+          message: "Blog Post was updated successfully.",
         });
       } else {
         res.send({
-          message: `Cannot delete Blog post with id=${id}. Maybe the post was not found!`
+          message: `Cannot update Blog Post with id=${id}. Maybe the Post was not found or req.body is empty!`,
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Could not delete Blog Post with id=" + id
+        message: "Error updating Blog Post with id=" + id,
+      });
+    });
+};
+//Deletes blog post by ID
+exports.delete = (req, res) => {
+  const id = req.params.id;
+  Blog.destroy({
+    where: { id: id },
+  })
+    .then(num => {
+      if (num == 1) {
+        res.send({
+          message: "Blog post was deleted successfully!",
+        });
+      } else {
+        res.send({
+          message: `Cannot delete Blog post with id=${id}. Maybe the post was not found!`,
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Could not delete Blog Post with id=" + id,
       });
     });
 };
 //NUKES ALL BLOG POSTS
 exports.deleteAll = (req, res) => {
-    exports.deleteAll = (req, res) => {
-      Blog.destroy({
-        where: {},
-        truncate: false,
-      })
-        .then(nums => {
-          res.send({ message: `${nums} Tutorials were deleted successfully!` });
-        })
-        .catch(err => {
-          res.status(500).send({
-            message:
-              err.message ||
-              "Some error occurred while removing all tutorials.",
-          });
-        });
-    };
-};
-//Finds all blog posts looking for the published to === true
-exports.findAllPublished = (req, res) => {
-    Blog.findAll({ where: { published: true } })
-      .then(data => {
-        res.send(data);
+  exports.deleteAll = (req, res) => {
+    Blog.destroy({
+      where: {},
+      truncate: false,
+    })
+      .then(nums => {
+        res.send({ message: `${nums} Tutorials were deleted successfully!` });
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while retrieving blog posts.",
+            err.message || "Some error occurred while removing all tutorials.",
         });
       });
+  };
+};
+//Finds all blog posts looking for the published to === true
+exports.findAllPublished = (req, res) => {
+  Blog.findAll({ where: { published: true } })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving blog posts.",
+      });
+    });
 };
