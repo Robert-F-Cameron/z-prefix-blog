@@ -8,11 +8,12 @@ const Role = db.role
 const PORT = process.env.PORT || 8080; // use either the host env var port (PORT) provided by Heroku or the local port (8081) on your machine
 
 var corsOptions = {
-  origin: `https://z-prefix-blog.herokuapp.com/`|| "http://localhost:3000", 
+  origin: process.env.APP_URL|| "http://localhost:3000", 
 };
 
 app.use(cors(corsOptions));
-app.use(express.static("build"));
+//Static build files
+//app.use(express.static("build"));
 //Parse requests of content type - application-json
 app.use(bodyParser.json());
 

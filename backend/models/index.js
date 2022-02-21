@@ -1,6 +1,7 @@
 const dbConfig = require("../config/db.config.js");
 
 const Sequelize = require("sequelize");
+//Production
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: 'postgres',
     protocol: 'postgres',
@@ -11,6 +12,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
         }
     }
 });
+//Development
 // const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 //   host: dbConfig.HOST,
 //   dialect: dbConfig.dialect,
