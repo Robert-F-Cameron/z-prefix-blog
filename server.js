@@ -20,12 +20,13 @@ app.use(bodyParser.json());
 //Parse requests of content type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
+db.sequelize.sync();
 //Syncs the database to the models created by Sequelize - Force is used for development purposes to drop and resync.
-db.sequelize.sync({ force: true })
-  .then(() => {
-  console.log("Drop and re-sync db.");
-  initial();
-});
+// db.sequelize.sync({ force: true })
+//   .then(() => {
+//   console.log("Drop and re-sync db.");
+//   initial();
+// });
 
 function initial() {
   Role.create({

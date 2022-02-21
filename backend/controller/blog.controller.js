@@ -81,7 +81,10 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
     const id = req.params.id;
     Blog.update(req.body, {
-      where: { id: id },
+      where: {
+        id: id,
+        order: [["createdAt"]],
+      },
     })
       .then(num => {
         if (num == 1) {
