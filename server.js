@@ -13,7 +13,7 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 //Static build files
-//app.use(express.static("build"));
+app.use(express.static("build"));
 //Parse requests of content type - application-json
 app.use(bodyParser.json());
 
