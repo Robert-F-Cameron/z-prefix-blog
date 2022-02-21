@@ -40,7 +40,7 @@ export function BlogPostCard(props) {
             dateFormat.parse(dateFormat.ISO8601_FORMAT, props.data.updatedAt)
           )}
         </Card.Text>
-        <BlogPost data={props.data}/>
+        <BlogPost data={props.data} fetch={props.fetch}/>
       </Card.Body>
     </Card>
   );

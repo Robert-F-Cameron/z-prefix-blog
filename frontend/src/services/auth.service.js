@@ -1,7 +1,5 @@
 import axios from 'axios';
-const API_URL =
-  `https://z-prefix-blog.herokuapp.com/api/users/` ||
-  "http://localhost:8080/api/users/";
+const API_URL = "https://z-prefix-blog.herokuapp.com/api/users/";
 
 //Registration endpoint call
 const register = (username, firstName, lastName, email, password, roles) => {

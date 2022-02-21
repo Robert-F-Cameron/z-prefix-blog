@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Container } from "react-bootstrap";
 import { BlogPostCard } from "./blog/BlogPostCard";
 import NewBlogPost from "./blog/NewBlogPost"
 import ContentService from "../services/content.service";
 const UserContent = () => {
   const [content, setContent] = useState("");
-  useEffect(() => {
+  const fetchData = useCallback(async () => {
+    console.log("Fetched!");
     ContentService.getPublicContent().then(
       response => {
         setContent(response.data);
@@ -19,17 +20,20 @@ const UserContent = () => {
       }
     );
   }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const displayBlogPosts = () => {
     if (!content.length) {
       return "No Posts Found!";
     } else {
-      return content.map(post => <BlogPostCard data={post} key={post.id} />);
+      return content.map(post => <BlogPostCard data={post} key={post.id} fetch={fetchData} />);
     }
   };
   return (
     <Container>
-      <NewBlogPost />
+      <NewBlogPost fetch={fetchData}/>
       {displayBlogPosts()}
     </Container>
     );

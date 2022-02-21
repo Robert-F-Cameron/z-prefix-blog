@@ -49,20 +49,22 @@ export default function EditBlogPost(props) {
             values.contents,
             values.published,
             user.id
-          ).then(
-            response => {},
-            error => {
-              const resMessage =
-                (error.response &&
-                  error.response.data &&
-                  error.response.data.message) ||
-                error.message ||
-                error.toString();
-              console.log(resMessage);
-              resetForm();
-              setSubmitting(false);
-            }
-          );
+          )
+            .then(
+              response => {},
+              error => {
+                const resMessage =
+                  (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                  error.message ||
+                  error.toString();
+                console.log(resMessage);
+                resetForm();
+                setSubmitting(false);
+              }
+            )
+            .then(props.edit(false));
         }}
       >
         {/* Callback function containing Formik state and helpers that handle common form actions */}

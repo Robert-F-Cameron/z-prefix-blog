@@ -1,8 +1,6 @@
 import axios from "axios";
 import authHeader from "./auth-header";
-const API_URL =
-  `https://z-prefix-blog.herokuapp.com/api/users/` ||
-  "http://localhost:8080/api/users/";
+const API_URL = "https://z-prefix-blog.herokuapp.com/api/users/";
 
 
 //Gets Single User

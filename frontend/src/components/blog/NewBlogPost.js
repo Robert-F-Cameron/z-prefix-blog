@@ -70,7 +70,11 @@ useEffect(() => {
                   resetForm();
                   setSubmitting(false);
                 }
-              );
+              )
+                .then(
+                  console.log("Edit fetch"),
+                  props.fetch()
+                );
             }}
           >
             {/* Callback function containing Formik state and helpers that handle common form actions */}

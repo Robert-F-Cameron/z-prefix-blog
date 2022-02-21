@@ -1,9 +1,7 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 import authService from './auth.service'
-const API_URL =
-  `https://z-prefix-blog.herokuapp.com/api/blogPosts/` ||
-  "http://localhost:8080/api/blogPosts/";
+const API_URL = "https://z-prefix-blog.herokuapp.com/api/blogPosts/";
 
 const user = authService.getCurrentUser();
 //Gets all public content
@@ -50,10 +48,19 @@ const updateBlogPost = (id, title, contents, published, userId) => {
       return response.data;
     });
 };
+//Delete Blog Post
+const deleteBlogPost = (id) => {
+  return axios
+    .delete(
+      API_URL + id,
+      {headers: authHeader()}
+    )
+}
 
 export default {
   getPublicContent,
   getUserContent,
   postBlog,
-  updateBlogPost
+  updateBlogPost,
+  deleteBlogPost
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import EditBlogPost from "./EditBlogPost";
 import AuthService from "../../services/auth.service";
 import userService from "../../services/user.service";
+import ContentService from "../../services/content.service";
 import { Container, Button, Modal, Row } from "react-bootstrap";
 
 export default function BlogPost(props) {
@@ -11,7 +12,17 @@ export default function BlogPost(props) {
   const [show, setShow] = useState(false);
   const [author, setAuthor] = useState("");
   const handleClose = () => setShow(false);
-  const handleEdit = () => setEdit(true);
+  const handleEdit = () => {
+    if (edit === true) {setEdit(false); props.fetch()}
+    else setEdit(true)
+  };
+  const handleDelete = () => {
+    ContentService.deleteBlogPost(
+      props.data.id
+    );
+    props.fetch()
+    handleClose()
+  }
   const handleShow = breakpoint => {
     setFullscreen(breakpoint);
     setShow(true);
@@ -25,7 +36,7 @@ export default function BlogPost(props) {
         </Container>
       );
     } else {
-      return <EditBlogPost data={props.data} />;
+      return <EditBlogPost data={props.data} edit={handleEdit}/>;
     }
   };
   const fetchData = useCallback(async () => {
@@ -54,8 +65,27 @@ export default function BlogPost(props) {
         <Modal.Body>{content()}</Modal.Body>
         <Modal.Footer>
           <Button
+            variant="danger"
+            hidden={
+              user === null
+                ? true
+                : user.id === props.data.userId
+                ? false
+                : true
+            }
+            onClick={handleDelete}
+          >
+            Delete Post
+          </Button>
+          <Button
             variant="primary"
-            hidden={(user === null) ? true: (user.id === props.data.userId ? false : true)}
+            hidden={
+              user === null
+                ? true
+                : user.id === props.data.userId
+                ? false
+                : true
+            }
             onClick={handleEdit}
           >
             Edit Post
