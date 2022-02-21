@@ -7,7 +7,7 @@ const UserContent = () => {
   const [content, setContent] = useState("");
   const fetchData = useCallback(async () => {
     console.log("Fetched!");
-    ContentService.getPublicContent().then(
+    ContentService.getUserContent().then(
       response => {
         setContent(response.data);
       },
